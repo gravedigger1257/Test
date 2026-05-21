@@ -115,12 +115,11 @@ button {
 // =====================
 let imagesBase = [
   "IMG_2594.png",
-  "IMG_2595.png",
   "IMG_2596.png",
   "IMG_2597.png",
-  "IMG_2598.png",
   "IMG_2599.png",
   "IMG_2600.png",
+  "IMG_2598.png",
   "IMG_2601.png",
   "IMG_2602.png",
   "IMG_2603.png"
