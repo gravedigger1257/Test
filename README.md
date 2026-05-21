@@ -1,165 +1,125 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smash or Pass</title>
-
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background: #111;
-      color: white;
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-
-    .container {
-      text-align: center;
-      width: 90%;
-      max-width: 500px;
-    }
-
-    h1 {
-      font-size: 42px;
-      margin-bottom: 10px;
-    }
-
-    .instructions {
-      color: #bbb;
-      margin-bottom: 20px;
-    }
-
-    .image-box {
-      width: 100%;
-      height: 500px;
-      background: #222;
-      border-radius: 20px;
-      overflow: hidden;
-      margin-bottom: 20px;
-    }
-
-    .image-box img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .buttons {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-    }
-
-    button {
-      border: none;
-      padding: 15px 30px;
-      font-size: 20px;
-      border-radius: 12px;
-      cursor: pointer;
-      color: white;
-      font-weight: bold;
-    }
-
-    .smash {
-      background: red;
-    }
-
-    .pass {
-      background: blue;
-    }
-
-    .overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 60px;
-      font-weight: bold;
-      z-index: 999;
-    }
-
-    .hidden {
-      display: none;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smash or Pass</title>
+<style>
+body{
+margin:0;
+background:#0f0f0f;
+font-family:Arial;
+color:white;
+overflow:hidden;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+flex-direction:column;
+}
+.container{
+display:flex;
+flex-direction:column;
+align-items:center;
+}
+.card{
+width:320px;
+height:420px;
+border-radius:20px;
+overflow:hidden;
+background:#222;
+box-shadow:0 0 20px rgba(0,0,0,0.5);
+}
+.card img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+.buttons{
+position:fixed;
+bottom:20px;
+display:flex;
+gap:20px;
+}
+button{
+padding:12px 18px;
+border:none;
+border-radius:10px;
+font-size:16px;
+cursor:pointer;
+font-weight:bold;
+}
+#smash{
+background:#4dff88;
+}
+#pass{
+background:#ff4d4d;
+color:white;
+}
+.popup{
+position:fixed;
+top:40%;
+font-size:50px;
+font-weight:bold;
+display:none;
+text-shadow:0 0 10px black;
+}
+</style>
 </head>
-
 <body>
+<div class="container">
+<div class="card">
+<img id="img" src="">
+</div>
+</div>
 
-  <div class="container">
-    <h1>Smash or Pass</h1>
+<div class="popup" id="popup"></div>
 
-    <p class="instructions">
-      Press Smash or Pass for each photo
-    </p>
+<div class="buttons">
+<button id="pass">Pass 👎</button>
+<button id="smash">Smash 🔥</button>
+</div>
 
-    <div class="image-box">
-      <img id="personImage" src="" alt="Random Person">
-    </div>
+<script>
+let images=[
+"IMG_5076.jpeg",
+"IMG_5075.jpeg",
+"IMG_5074.jpeg"
+];
 
-    <div class="buttons">
-      <button id="smashBtn" class="smash">SMASH</button>
-      <button id="passBtn" class="pass">PASS</button>
-    </div>
-  </div>
+let index=0;
 
-  <div id="overlay" class="overlay hidden">
-    <h2 id="overlayText"></h2>
-  </div>
+const img=document.getElementById("img");
+const popup=document.getElementById("popup");
 
-  <script>
-    const images = [
-      "IMG_2534.jpeg",
-      "IMG_2549.png",
-      "IMG_2550.jpeg",
-      "IMG_2551.jpeg",
-      "IMG_2552.jpeg",
-      "IMG_2553.jpeg",
-      "IMG_2554.jpeg",
-      "IMG_2555.jpeg",
-      "IMG_2556.jpeg",
-      "IMG_2557.jpeg"
-    ];
+function load(){
+if(index>=images.length){
+popup.innerText="DONE";
+popup.style.color="white";
+popup.style.display="block";
+document.querySelector(".card").style.display="none";
+document.querySelector(".buttons").style.display="none";
+return;
+}
+img.src=images[index];
+}
 
-    const personImage = document.getElementById("personImage");
-    const overlay = document.getElementById("overlay");
-    const overlayText = document.getElementById("overlayText");
+function next(text,color){
+popup.innerText=text;
+popup.style.color=color;
+popup.style.display="block";
 
-    function randomImage() {
-      const randomIndex = Math.floor(Math.random() * images.length);
-      personImage.src = images[randomIndex];
-    }
+setTimeout(()=>{
+popup.style.display="none";
+},500);
 
-    function showOverlay(text, color) {
-      overlay.style.background = color;
-      overlayText.textContent = text;
-      overlay.classList.remove("hidden");
+index++;
+load();
+}
 
-      setTimeout(() => {
-        overlay.classList.add("hidden");
-        randomImage();
-      }, 1000);
-    }
+document.getElementById("smash").onclick=()=>next("SMASH 🔥","lime");
+document.getElementById("pass").onclick=()=>next("PASS 👎","red");
 
-    document.getElementById("smashBtn").addEventListener("click", () => {
-      showOverlay("SMASHED", "rgba(255,0,0,0.9)");
-    });
-
-    document.getElementById("passBtn").addEventListener("click", () => {
-      showOverlay("PASS", "rgba(0,0,255,0.9)");
-    });
-
-    randomImage();
-  </script>
-
+load();
+</script>
 </body>
 </html>
