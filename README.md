@@ -7,19 +7,15 @@
 body {
   margin: 0;
   background: #0f0f0f;
-  font-family: Arial, sans-serif;
+  font-family: Arial;
   color: white;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
 }
-.container {
+#app {
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-top: 10px;
 }
 .card {
   width: 320px;
@@ -27,128 +23,190 @@ body {
   border-radius: 20px;
   overflow: hidden;
   background: #222;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+  position: relative;
+  margin-top: 10px;
 }
 .card img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
-.buttons {
-  margin-top: 20px;
+.flashScreen {
+  position: fixed;
+  inset: 0;
+  background: #000;
   display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 999;
+}
+.flashShow {
+  opacity: 1;
+}
+#flashText {
+  font-size: 64px;
+  font-weight: 900;
+  white-space: nowrap;
+  text-align: center;
+  padding: 20px;
+  text-shadow: 0 0 25px rgba(255,255,255,0.3);
+}
+.buttons {
+  position: fixed;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
   gap: 20px;
 }
 button {
-  padding: 12px 24px;
+  padding: 12px 18px;
   border: none;
   border-radius: 10px;
-  font-size: 16px;
-  font-weight: bold;
   cursor: pointer;
-  transition: transform 0.1s;
-}
-button:active {
-  transform: scale(0.95);
-}
-#smash {
-  background: #4dff88;
-  color: black;
+  font-size: 16px;
 }
 #pass {
   background: #ff4d4d;
   color: white;
 }
-.popup {
-  position: fixed;
-  top: 40%;
-  font-size: 50px;
-  font-weight: bold;
+#smash {
+  background: #4dff88;
+  color: black;
+}
+#endScreen {
+  position: absolute;
+  inset: 0;
   display: none;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-  z-index: 10;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+#endScreenContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 </style>
 </head>
 <body>
-
-<div class="container">
+<div id="app">
+  <div class="flashScreen" id="flashScreen">
+    <div id="flashText"></div>
+  </div>
   <div class="card">
-    <img id="img" src="" alt="Loading..." />
+    <img id="img" src="" />
+    <div id="endScreen">
+      <div id="endScreenContent"></div>
+    </div>
   </div>
 </div>
-
-<div class="popup" id="popup"></div>
-
 <div class="buttons">
   <button id="pass">Pass 👎</button>
   <button id="smash">Smash 🔥</button>
 </div>
-
 <script>
 // =====================
-// IMAGES (Matches your screenshot)
+// IMAGES (PNG FIX)
 // =====================
-let images = [
-  "IMG_2583.jpeg",
-  "IMG_2584.jpeg",
-  "IMG_2585.jpeg",
-  "IMG_2586.jpeg",
-  "IMG_2587.jpeg",
-  "IMG_2588.jpeg",
-  "IMG_2589.jpeg",
-  "IMG_2590.jpeg",
-  "IMG_2591.jpeg",
-  "IMG_2592.jpeg"
+let imagesBase = [
+  "IMG_2594.png",
+  "IMG_2595.png",
+  "IMG_2596.png",
+  "IMG_2597.png",
+  "IMG_2598.png",
+  "IMG_2599.png",
+  "IMG_2600.png",
+  "IMG_2601.png",
+  "IMG_2602.png",
+  "IMG_2603.png"
 ];
-
+let images = [];
+// shuffle
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+// state
 let index = 0;
-const img = document.getElementById("img");
-const popup = document.getElementById("popup");
-const buttonsDiv = document.querySelector(".buttons");
-
-// =====================
-// LOAD IMAGE
-// =====================
+let smash = 0;
+let pass = 0;
+// start round
+function startRound() {
+  images = shuffle([...imagesBase]); 
+  index = 0;
+  smash = 0;
+  pass = 0;
+  load();
+}
+// load image
 function load() {
   if (index >= images.length) {
-    popup.innerText = "DONE 🎉";
-    popup.style.color = "white";
-    popup.style.display = "block";
-    img.style.display = "none"; // Hide image container when done
-    buttonsDiv.style.display = "none"; // Hide buttons when done
+    end();
     return;
   }
-  
-  // Using a direct relative path. If index.html and images are in the same folder, 
-  // this works perfectly both locally and on GitHub Pages.
-  img.src = images[index];
+  document.getElementById("img").src = images[index];
 }
-
-// =====================
-// NEXT IMAGE
-// =====================
-function next(text, color) {
-  popup.innerText = text;
-  popup.style.color = color;
-  popup.style.display = "block";
-  
+// end screen
+function end() {
+  document.querySelector(".card img").style.display = "none";
+  document.querySelector(".buttons").style.display = "none";
+  const endScreen = document.getElementById("endScreen");
+  const endScreenContent = document.getElementById("endScreenContent");
+  endScreen.style.display = "flex";
+  endScreenContent.innerHTML = `
+    <h2>Done!</h2>
+    <p style="font-size:20px;">🔥 Smashes: ${smash}</p>
+    <p style="font-size:20px;">👎 Passes: ${pass}</p>
+    <button onclick="restart()" 
+      style="margin-top:10px; padding:10px 15px; border:none; border-radius:10px;">
+      Play Again
+    </button>
+  `;
+}
+// restart
+function restart() {
+  document.querySelector(".card img").style.display = "block";
+  document.querySelector(".buttons").style.display = "flex";
+  document.getElementById("endScreen").style.display = "none";
+  startRound();
+}
+// flash effect
+function showFlash(text, color) {
+  const flashScreen = document.getElementById("flashScreen");
+  const flashText = document.getElementById("flashText");
+  flashScreen.classList.remove("flashShow");
+  void flashScreen.offsetWidth;
+  flashText.innerText = text;
+  flashText.style.color = color;
+  flashScreen.classList.add("flashShow");
   setTimeout(() => {
-    popup.style.display = "none";
-  }, 500);
-  
+    flashScreen.classList.remove("flashShow");
+  }, 700);
   index++;
   load();
 }
-
-// =====================
-// BUTTON EVENTS
-// =====================
-document.getElementById("smash").onclick = () => next("SMASH 🔥", "#4dff88");
-document.getElementById("pass").onclick = () => next("PASS 👎", "#ff4d4d");
-
-// Initial Load
-load();
+// buttons
+document.getElementById("pass").onclick = () => swipe("left");
+document.getElementById("smash").onclick = () => swipe("right");
+function swipe(dir) {
+  if (navigator.vibrate) navigator.vibrate(120);
+  if (dir === "right") {
+    smash++;
+    showFlash("SMASH 🔥", "#4dff88");
+  } else {
+    pass++;
+    showFlash("PASS 👎", "#ff4d4d");
+  }
+}
+startRound();
 </script>
 </body>
 </html>
