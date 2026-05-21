@@ -81,9 +81,16 @@ text-shadow:0 0 10px black;
 
 <script>
 let images=[
-"IMG_5076.jpeg",
-"IMG_5075.jpeg",
-"IMG_5074.jpeg"
+"IMG_2583.jpeg",
+"IMG_2584.jpeg",
+"IMG_2585.jpeg",
+"IMG_2586.jpeg",
+"IMG_2587.jpeg",
+"IMG_2588.jpeg",
+"IMG_2589.jpeg",
+"IMG_2590.jpeg",
+"IMG_2591.jpeg",
+"IMG_2592.jpeg",
 ];
 
 let index=0;
