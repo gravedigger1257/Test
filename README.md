@@ -71,7 +71,7 @@ display: none;
 </div>
 <script>
 // =====================
-// IMAGES (2583 → 2592)
+// IMAGES
 // =====================
 let images = [
 "IMG_2583.jpeg",
@@ -89,7 +89,14 @@ let index = 0;
 const img = document.getElementById("img");
 const popup = document.getElementById("popup");
 // =====================
-// LOAD IMAGE (GitHub-safe path)
+// GET CORRECT GITHUB PAGES PATH
+// =====================
+function getBasePath() {
+const pathParts = window.location.pathname.split("/");
+return "/" + pathParts[1] + "/";
+}
+// =====================
+// LOAD IMAGE (FIXED)
 // =====================
 function load() {
 if (index >= images.length) {
@@ -97,10 +104,10 @@ popup.innerText = "DONE";
 popup.style.display = "block";
 return;
 }
-img.src = "./" + images[index];
+img.src = getBasePath() + images[index];
 }
 // =====================
-// NEXT
+// NEXT IMAGE
 // =====================
 function next(text, color) {
 popup.innerText = text;
