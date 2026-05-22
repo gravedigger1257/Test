@@ -8,7 +8,7 @@
 body {
   margin: 0;
   background: #0f0f0f;
-  font-family: Arial;
+  font-family: Arial, sans-serif;
   color: white;
   overflow: hidden;
 }
@@ -100,7 +100,7 @@ button {
     <div id="flashText"></div>
   </div>
   <div class="card">
-    <img id="img" src="" />
+    <img id="img" src="" alt="Loading Image..." />
     <div id="endScreen">
       <div id="endScreenContent"></div>
     </div>
@@ -112,21 +112,24 @@ button {
 </div>
 <script>
 // =====================
-// IMAGES WITH TEST FOLDER PATH
+// FIXED IMAGE DATA
 // =====================
+let folderName = "Test"; // <--- CHANGE THIS to "test" if your GitHub folder is lowercase!
+
 let imagesBase = [
-  "Test/IMG_2594.png",
-  "Test/IMG_2595.png",
-  "Test/IMG_2596.png",
-  "Test/IMG_2597.png",
-  "Test/IMG_2598.png",
-  "Test/IMG_2599.png",
-  "Test/IMG_2600.png",
-  "Test/IMG_2601.png",
-  "Test/IMG_2602.png",
-  "Test/IMG_2603.png"
+  "IMG_2594.png",
+  "IMG_2595.png",
+  "IMG_2596.png",
+  "IMG_2597.png",
+  "IMG_2598.png",
+  "IMG_2599.png",
+  "IMG_2600.png",
+  "IMG_2601.png",
+  "IMG_2602.png",
+  "IMG_2603.png"
 ];
 let images = [];
+
 // shuffle
 function shuffle(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
@@ -135,10 +138,12 @@ function shuffle(arr) {
   }
   return arr;
 }
+
 // state
 let index = 0;
 let smash = 0;
 let pass = 0;
+
 // start round
 function startRound() {
   images = shuffle([...imagesBase]); 
@@ -147,14 +152,27 @@ function startRound() {
   pass = 0;
   load();
 }
-// load image
+
+// load image (Dynamically builds absolute paths safely)
 function load() {
   if (index >= images.length) {
     end();
     return;
   }
-  document.getElementById("img").src = images[index];
+  
+  // Dynamic URL fixing logic
+  let currentPath = window.location.pathname;
+  let repoName = currentPath.split('/')[1] || '';
+  
+  if (repoName && !repoName.includes('.html')) {
+    // If hosted on GitHub project pages (username.github.io/repo-name/)
+    document.getElementById("img").src = window.location.origin + "/" + repoName + "/" + folderName + "/" + images[index];
+  } else {
+    // Fallback if running at user root or local testing environment
+    document.getElementById("img").src = window.location.origin + "/" + folderName + "/" + images[index];
+  }
 }
+
 // end screen
 function end() {
   document.querySelector(".card img").style.display = "none";
@@ -167,11 +185,12 @@ function end() {
     <p style="font-size:20px;">🔥 Smashes: ${smash}</p>
     <p style="font-size:20px;">👎 Passes: ${pass}</p>
     <button onclick="restart()" 
-      style="margin-top:10px; padding:10px 15px; border:none; border-radius:10px;">
+      style="margin-top:10px; padding:10px 15px; border:none; border-radius:10px; background:#4dff88; color:black; font-weight:bold;">
       Play Again
     </button>
   `;
 }
+
 // restart
 function restart() {
   document.querySelector(".card img").style.display = "block";
@@ -179,6 +198,7 @@ function restart() {
   document.getElementById("endScreen").style.display = "none";
   startRound();
 }
+
 // flash effect
 function showFlash(text, color) {
   const flashScreen = document.getElementById("flashScreen");
@@ -194,6 +214,7 @@ function showFlash(text, color) {
   index++;
   load();
 }
+
 // buttons
 document.getElementById("pass").onclick = () => swipe("left");
 document.getElementById("smash").onclick = () => swipe("right");
@@ -207,6 +228,7 @@ function swipe(dir) {
     showFlash("PASS 👎", "#ff4d4d");
   }
 }
+
 startRound();
 </script>
 </body>
