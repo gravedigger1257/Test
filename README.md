@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -111,19 +112,19 @@ button {
 </div>
 <script>
 // =====================
-// IMAGES (PNG FIX)
+// IMAGES WITH TEST FOLDER PATH
 // =====================
 let imagesBase = [
-  "IMG_2594.png",
-  "IMG_2595.png",
-  "IMG_2596.png",
-  "IMG_2597.png",
-  "IMG_2598.png",
-  "IMG_2599.png",
-  "IMG_2600.png",
-  "IMG_2601.png",
-  "IMG_2602.png",
-  "IMG_2603.png",
+  "Test/IMG_2594.png",
+  "Test/IMG_2595.png",
+  "Test/IMG_2596.png",
+  "Test/IMG_2597.png",
+  "Test/IMG_2598.png",
+  "Test/IMG_2599.png",
+  "Test/IMG_2600.png",
+  "Test/IMG_2601.png",
+  "Test/IMG_2602.png",
+  "Test/IMG_2603.png"
 ];
 let images = [];
 // shuffle
