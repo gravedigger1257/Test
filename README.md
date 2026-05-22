@@ -114,15 +114,7 @@ button {
 // IMAGES (PNG FIX)
 // =====================
 let imagesBase = [
-  "IMG_2594.PNH",
-  "IMG_2596.PNG",
-  "IMG_2597.PNG",
-  "IMG_2599.PNG",
-  "IMG_2600.PNG",
-  "IMG_2598.PNG",
-  "IMG_2601.PNG",
-  "IMG_2602.PNG",
-  "IMG_2603.PNG"
+  "IMG_2594.png",
 ];
 let images = [];
 // shuffle
